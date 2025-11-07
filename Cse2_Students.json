@@ -14,6 +14,13 @@
         "photo": "female_avatar.png"
     },
     {
+        "username": "abcd",
+        "password": "1234",
+        "full_name": "abcdef",
+        "gender": "female",
+        "photo": "female_avatar.png"
+    },
+    {
         "username": "Lina Mahboubi",
         "password": "280906",
         "full_name": "Mahboubi Lina Alaa",
