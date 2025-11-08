@@ -90,24 +90,26 @@ def main(page: ft.Page):
                 expand=True,
                 image=ft.Image(
                     src="University_Background.png",
-                    fit=ft.ImageFit.COVER,
+                    fit=ft.ImageFit.COVER
                 )
             )
 
             form_container.content = ft.Column(
                 [
                     header_container,
-                    background_container,
+                    background_container
                 ],
                 spacing=0,
-                expand=True
+                expand=True,
+                alignment=ft.MainAxisAlignment.START,
+                horizontal_alignment=ft.CrossAxisAlignment.STRETCH
             )
 
             page.views.append(
                 ft.View(
                     "/",
                     [form_container],
-                    bgcolor="#CBD4E0",
+                    bgcolor="#CBD4E0"
                 )
             )
 
