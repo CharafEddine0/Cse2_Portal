@@ -86,7 +86,7 @@ def main(page: ft.Page):
                 vertical_alignment=ft.CrossAxisAlignment.CENTER,
                 spacing=5
             ),
-            height=25,  # thin header
+            height=10,  # thin header
             expand=True,
             bgcolor="#E6E6E6",
             clip_behavior=ft.ClipBehavior.HARD_EDGE
