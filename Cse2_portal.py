@@ -58,8 +58,7 @@ def main(page: ft.Page):
                         width=60,
                         height=20,
                         bgcolor="#00A8CC",
-                        color=ft.Colors.WHITE,
-                        padding=0
+                        color=ft.Colors.WHITE
                     ),
                     ft.ElevatedButton(
                         "Login",
@@ -67,8 +66,7 @@ def main(page: ft.Page):
                         width=60,
                         height=20,
                         bgcolor="#007BFF",
-                        color=ft.Colors.WHITE,
-                        padding=0
+                        color=ft.Colors.WHITE
                     ),
                     ft.ElevatedButton(
                         "Courses",
@@ -76,8 +74,7 @@ def main(page: ft.Page):
                         width=60,
                         height=20,
                         bgcolor="#28A745",
-                        color=ft.Colors.WHITE,
-                        padding=0
+                        color=ft.Colors.WHITE
                     ),
                     ft.Text(
                         "Support: +213 556 68 85 75 | elearning@univ-guelma.dz",
@@ -92,7 +89,6 @@ def main(page: ft.Page):
             height=25,  # thin header
             expand=True,
             bgcolor="#E6E6E6",
-            padding=2,
             clip_behavior=ft.ClipBehavior.HARD_EDGE
         )
 
