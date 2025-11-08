@@ -51,9 +51,8 @@ def main(page: ft.Page):
     # ---------------- ROUTES ----------------
     def route_change(e):
         page.views.clear()
-        # ---------------- HOME PAGE ----------------
+        # Home Page
         if page.route == "/":
-            # Top Header Row: Login, Courses, Support
             header = ft.Row(
                 [
                     ft.ElevatedButton(
@@ -65,7 +64,7 @@ def main(page: ft.Page):
                     ),
                     ft.ElevatedButton(
                         "Courses",
-                        on_click=lambda e: page.go("/courses"),  # placeholder
+                        on_click=lambda e: page.go("/courses"),
                         bgcolor="#007BFF",
                         color=ft.Colors.WHITE,
                         width=100,
@@ -74,32 +73,27 @@ def main(page: ft.Page):
                         "Support: +213 556 68 85 75 | elearning@univ-guelma.dz",
                         color=ft.Colors.BLACK,
                         size=14,
-                    ),
+                    )
                 ],
                 alignment=ft.MainAxisAlignment.SPACE_AROUND,
                 vertical_alignment=ft.CrossAxisAlignment.CENTER,
             )
 
-            # Header container (fixed height + padding)
             header_container = ft.Container(
                 content=header,
                 padding=10,
                 bgcolor="#E6E6E6",
-                height=60,
-                width=700,  # optional, can remove for responsive
-                alignment=ft.alignment.center,
+                height=60
             )
 
-            # Background container (fills remaining page)
             background_container = ft.Container(
-                expand=True,  # fills all remaining vertical space
+                expand=True,
                 image=ft.Image(
-                    src="University_Background.png",  # make sure file is in assets_dir
+                    src="University_Background.png",
                     fit=ft.ImageFit.COVER
                 )
             )
 
-            # Column: Header + Background
             form_container.content = ft.Column(
                 [
                     header_container,
@@ -107,16 +101,15 @@ def main(page: ft.Page):
                 ],
                 spacing=0,
                 expand=True,
-                horizontal_alignment=ft.CrossAxisAlignment.STRETCH,
-                alignment=ft.MainAxisAlignment.START
+                alignment=ft.MainAxisAlignment.START,
+                horizontal_alignment=ft.CrossAxisAlignment.STRETCH
             )
 
-            # Add view to page
             page.views.append(
                 ft.View(
                     "/",
                     [form_container],
-                    bgcolor="#CBD4E0"  # fallback background color
+                    bgcolor="#CBD4E0"
                 )
             )
 
