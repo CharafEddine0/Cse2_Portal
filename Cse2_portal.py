@@ -2,7 +2,7 @@ import flet as ft
 import json
 import os
 
-# Container for content
+# Container for login/profile content
 form_container = ft.Container(
     padding=20,
     border_radius=14,
@@ -31,7 +31,6 @@ def main(page: ft.Page):
     DEFAULT_MALE = "male_avatar.png"
     DEFAULT_FEMALE = "female_avatar.png"
 
-    # Assign default images
     for s in students_info:
         if not s.get("photo"):
             s["photo"] = DEFAULT_FEMALE if s.get("gender") == "female" else DEFAULT_MALE
@@ -44,7 +43,6 @@ def main(page: ft.Page):
         student["photo"] = default_photo
         student_pfp.src = default_photo
         page.update()
-        # Save updated student data
         with open("Cse2_Students.json", "w") as students_data_file:
             json.dump(students_info, students_data_file, indent=4)
 
@@ -85,23 +83,25 @@ def main(page: ft.Page):
                 padding=5,
                 bgcolor="#E6E6E6",
                 height=40,
-                expand=True  # fills full width
+                expand=True  # full width header
             )
 
-            form_container.content = ft.Column(
+            home_content = ft.Column(
                 [
-                    header_container
+                    ft.Text("Welcome to CSE2 Portal!", size=24, weight="bold", color=ft.Colors.BLACK),
+                    ft.Text(f"Promo: {PROMO_NAME} | Major: {PROMO_MAJOR}", size=16, color=ft.Colors.BLACK),
                 ],
-                spacing=0,
-                expand=True,
-                alignment=ft.MainAxisAlignment.START,
-                horizontal_alignment=ft.CrossAxisAlignment.STRETCH
+                alignment=ft.MainAxisAlignment.CENTER,
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER
             )
 
             page.views.append(
                 ft.View(
                     "/",
-                    [form_container],
+                    [
+                        header_container,
+                        home_content
+                    ],
                     bgcolor="#CBD4E0"
                 )
             )
@@ -238,7 +238,6 @@ def main(page: ft.Page):
 
             form_container.content = ft.Column(
                 [
-                    header_container_profile,
                     ft.Text(PROMO_NAME, size=18, color=ft.Colors.BLACK),
                     student_pfp,
                     ft.Row(
@@ -272,7 +271,10 @@ def main(page: ft.Page):
             page.views.append(
                 ft.View(
                     "/profile",
-                    [form_container],
+                    [
+                        header_container_profile,  # full width
+                        form_container             # centered content
+                    ],
                     bgcolor="#CBD4E0",
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                     vertical_alignment=ft.MainAxisAlignment.CENTER,
