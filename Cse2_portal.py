@@ -240,6 +240,7 @@ def main(page: ft.Page):
             file_picker = ft.FilePicker(on_result=change_photo)
             page.overlay.append(file_picker)
 
+            # Profile header with Home + Logout
             profile_header = ft.Row(
                 [
                     ft.ElevatedButton(
@@ -267,6 +268,32 @@ def main(page: ft.Page):
                 bgcolor="#E6E6E6",
                 height=40,
                 expand=True
+            )
+
+            # Group info
+            group_name = student.get("group", "Not assigned")
+            group_members = [s['full_name'] for s in students_info if s.get("group") == group_name]
+
+            members_section = ft.Column(
+                [
+                    ft.Text("👥 Group Members", size=18, weight="bold"),
+                    ft.Column([ft.Text(f"- {m}") for m in group_members])
+                ],
+                spacing=5,
+                alignment=ft.MainAxisAlignment.START,
+                horizontal_alignment=ft.CrossAxisAlignment.START
+            )
+
+            # My Courses placeholder
+            courses = ["Mathematical Analysis", "Introduction to information systems", "Algorithms and data structures"]
+            mycourses_section = ft.Column(
+                [
+                    ft.Text("📚 My Courses", size=18, weight="bold"),
+                    ft.Column([ft.Text(f"- {c}") for c in courses])
+                ],
+                spacing=5,
+                alignment=ft.MainAxisAlignment.START,
+                horizontal_alignment=ft.CrossAxisAlignment.START
             )
 
             form_container.content = ft.Column(
@@ -297,6 +324,9 @@ def main(page: ft.Page):
                     ft.Text(f"{student['full_name']} {emoji}", size=22, weight="bold", color=ft.Colors.BLACK),
                     ft.Text(f"Major: {PROMO_MAJOR}", color=ft.Colors.BLACK),
                     ft.Text(f"University: {UNIVERSITY_NAME}", color=ft.Colors.BLACK),
+                    ft.Text(f"Group: {group_name}", color=ft.Colors.BLACK),
+                    members_section,
+                    mycourses_section
                 ],
                 spacing=10,
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
@@ -314,7 +344,6 @@ def main(page: ft.Page):
 
         # ---------------- UNIVERSITY PAGE ----------------
         elif page.route == "/university":
-            # Just a placeholder for now
             form_container.content = ft.Column(
                 [
                     ft.Text("🏫 Welcome to the University Page", size=22, weight="bold"),
