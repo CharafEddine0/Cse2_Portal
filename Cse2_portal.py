@@ -55,21 +55,21 @@ def main(page: ft.Page):
                     ft.ElevatedButton(
                         "Home",
                         on_click=lambda e: page.go("/"),
-                        width=80,
+                        width=70,
                         bgcolor="#00A8CC",
                         color=ft.Colors.WHITE
                     ),
                     ft.ElevatedButton(
                         "Login",
                         on_click=lambda e: page.go("/login"),
-                        width=80,
+                        width=70,
                         bgcolor="#007BFF",
                         color=ft.Colors.WHITE
                     ),
                     ft.ElevatedButton(
                         "Courses",
                         on_click=lambda e: page.go("/courses"),
-                        width=80,
+                        width=70,
                         bgcolor="#28A745",
                         color=ft.Colors.WHITE
                     ),
@@ -82,10 +82,10 @@ def main(page: ft.Page):
                 alignment=ft.MainAxisAlignment.SPACE_AROUND,
                 vertical_alignment=ft.CrossAxisAlignment.CENTER
             ),
-            height=30,  # thin header
+            height=20,  # THIN HEADER
             expand=True,
             bgcolor="#E6E6E6",
-            padding=3
+            padding=2
         )
 
         # ---------------- HOME PAGE ----------------
@@ -125,6 +125,12 @@ def main(page: ft.Page):
 
             form_container.content = ft.Column(
                 [
+                    ft.Image(
+                        src="University_Logo.png",  # logo visible
+                        width=200,
+                        height=100,
+                        fit=ft.ImageFit.CONTAIN
+                    ),
                     ft.Text("CSE2 Student Portal", size=24, weight="bold"),
                     username,
                     password,
@@ -195,4 +201,5 @@ def main(page: ft.Page):
     page.on_route_change = route_change
     page.go("/")
 
+# Run the app
 ft.app(target=main, view=ft.WEB_BROWSER, assets_dir="User_Data/assets")
