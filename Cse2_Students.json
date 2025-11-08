@@ -4,27 +4,32 @@
         "password": "100704",
         "full_name": "Boumiza Charaf Eddine",
         "gender": "male",
-        "photo": "male_avatar.png"
+        "photo": "male_avatar.png",
+        "group": "3"
+
     },
     {
         "username": "abcd",
         "password": "1234",
         "full_name": "abcdef",
         "gender": "female",
-        "photo": "female_avatar.png"
+        "photo": "female_avatar.png",
+        "group": "3"
     },
     {
         "username": "abcdee",
         "password": "123456",
         "full_name": "abcdefff",
         "gender": "female",
-        "photo": "female_avatar.png"
+        "photo": "female_avatar.png",
+        "group": "2"
     },
     {
         "username": "Lina Mahboubi",
         "password": "280906",
         "full_name": "Mahboubi Lina Alaa",
         "gender": "female",
-        "photo": "female_avatar.png"
+        "photo": "female_avatar.png",
+        "group": "2"
     }
 ]
