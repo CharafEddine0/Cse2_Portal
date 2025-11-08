@@ -53,7 +53,6 @@ def main(page: ft.Page):
         page.views.clear()
         # ---------------- HOME PAGE ----------------
         if page.route == "/":
-            # Header Row: buttons + support info
             header = ft.Row(
                 [
                     ft.ElevatedButton(
@@ -65,7 +64,7 @@ def main(page: ft.Page):
                     ),
                     ft.ElevatedButton(
                         "Courses",
-                        on_click=lambda e: page.go("/courses"),  # placeholder for future page
+                        on_click=lambda e: page.go("/courses"),
                         bgcolor="#007BFF",
                         color=ft.Colors.WHITE,
                         width=100,
@@ -80,35 +79,35 @@ def main(page: ft.Page):
                 vertical_alignment=ft.CrossAxisAlignment.CENTER,
             )
 
-            # Wrap header in a container for padding/background
             header_container = ft.Container(
                 content=header,
                 padding=10,
-                bgcolor="#E6E6E6",  # optional header background color
+                bgcolor="#E6E6E6",
             )
 
-            # Background image container (fills rest of the page)
             background_container = ft.Container(
-                expand=True,  # fills remaining vertical space
+                expand=True,
                 image=ft.Image(
-                    src="University_Background.png",  # your image file in assets_dir
-                    fit=ft.ImageFit.COVER,  # cover full container without stretching
+                    src="University_Background.png",
+                    fit=ft.ImageFit.COVER,
                 )
             )
-            # Combine header + background
+
+            form_container = ft.Container(expand=True)  # full-page container
             form_container.content = ft.Column(
                 [
                     header_container,
                     background_container,
                 ],
-                spacing=0,  # no extra space between header and image
+                spacing=0,
+                expand=True,
             )
-            # Add the view
+
             page.views.append(
                 ft.View(
                     "/",
                     [form_container],
-                    bgcolor="#CBD4E0",  # fallback background color
+                    bgcolor="#CBD4E0",
                 )
             )
         # ---------------- LOGIN PAGE ----------------
