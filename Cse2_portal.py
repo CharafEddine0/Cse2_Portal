@@ -80,10 +80,10 @@ def main(page: ft.Page):
 
             header_container = ft.Container(
                 content=header,
-                padding=5,
+                padding=3,
                 bgcolor="#E6E6E6",
-                height=40,
-                expand=True  # full width header
+                height=25,    # thin header
+                expand=True
             )
 
             home_content = ft.Column(
@@ -230,10 +230,10 @@ def main(page: ft.Page):
 
             header_container_profile = ft.Container(
                 content=profile_header,
-                padding=5,
+                padding=3,
                 bgcolor="#E6E6E6",
-                height=40,
-                expand=True  # full width
+                height=25,    # thin header
+                expand=True
             )
 
             form_container.content = ft.Column(
@@ -272,7 +272,7 @@ def main(page: ft.Page):
                 ft.View(
                     "/profile",
                     [
-                        header_container_profile,  # full width
+                        header_container_profile,  # full width, thin header
                         form_container             # centered content
                     ],
                     bgcolor="#CBD4E0",
