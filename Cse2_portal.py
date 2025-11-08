@@ -82,7 +82,7 @@ def main(page: ft.Page):
                 alignment=ft.MainAxisAlignment.SPACE_AROUND,
                 vertical_alignment=ft.CrossAxisAlignment.CENTER
             ),
-            height=20,  # THIN HEADER
+            height=15,  # THIN HEADER
             expand=True,
             bgcolor="#E6E6E6",
             padding=2
