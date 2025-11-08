@@ -52,41 +52,40 @@ def main(page: ft.Page):
 
         # ---------------- HOME PAGE ----------------
         if page.route == "/":
-            # Thin full-width header
-            header = ft.Row(
-                [
-                    ft.ElevatedButton(
-                        "Login",
-                        on_click=lambda e: page.go("/login"),
-                        bgcolor="#00A8CC",
-                        color=ft.Colors.WHITE,
-                        width=100,
-                    ),
-                    ft.ElevatedButton(
-                        "Courses",
-                        on_click=lambda e: page.go("/courses"),
-                        bgcolor="#007BFF",
-                        color=ft.Colors.WHITE,
-                        width=100,
-                    ),
-                    ft.Text(
-                        "Support: +213 556 68 85 75 | elearning@univ-guelma.dz",
-                        color=ft.Colors.BLACK,
-                        size=14,
-                    ),
-                ],
-                alignment=ft.MainAxisAlignment.SPACE_AROUND,
-                vertical_alignment=ft.CrossAxisAlignment.CENTER,
-            )
-
+            # --- Separate thin header container ---
             header_container = ft.Container(
-                content=header,
+                content=ft.Row(
+                    [
+                        ft.ElevatedButton(
+                            "Login",
+                            on_click=lambda e: page.go("/login"),
+                            bgcolor="#00A8CC",
+                            color=ft.Colors.WHITE,
+                            width=100,
+                        ),
+                        ft.ElevatedButton(
+                            "Courses",
+                            on_click=lambda e: page.go("/courses"),
+                            bgcolor="#007BFF",
+                            color=ft.Colors.WHITE,
+                            width=100,
+                        ),
+                        ft.Text(
+                            "Support: +213 556 68 85 75 | elearning@univ-guelma.dz",
+                            color=ft.Colors.BLACK,
+                            size=14,
+                        ),
+                    ],
+                    alignment=ft.MainAxisAlignment.SPACE_AROUND,
+                    vertical_alignment=ft.CrossAxisAlignment.CENTER,
+                ),
+                height=25,  # thin header
                 padding=3,
                 bgcolor="#E6E6E6",
-                height=25,    # thin header
-                expand=True    # full width
+                expand=True  # full width
             )
 
+            # --- Home page main content ---
             home_content = ft.Column(
                 [
                     ft.Text("Welcome to CSE2 Portal!", size=24, weight="bold", color=ft.Colors.BLACK),
@@ -100,8 +99,8 @@ def main(page: ft.Page):
                 ft.View(
                     "/",
                     [
-                        header_container,
-                        home_content
+                        header_container,  # header is fully separate
+                        home_content       # content below header
                     ],
                     bgcolor="#CBD4E0"
                 )
@@ -208,33 +207,31 @@ def main(page: ft.Page):
             file_picker = ft.FilePicker(on_result=change_photo)
             page.overlay.append(file_picker)
 
-            # Thin full-width header for Profile
-            profile_header = ft.Row(
-                [
-                    ft.ElevatedButton(
-                        "Home",
-                        on_click=lambda e: page.go("/"),
-                        bgcolor="#00A8CC",
-                        color=ft.Colors.WHITE,
-                        width=100,
-                    ),
-                    ft.ElevatedButton(
-                        "Logout",
-                        on_click=lambda e: page.go("/login"),
-                        bgcolor="#DC3545",
-                        color=ft.Colors.WHITE,
-                        width=100,
-                    ),
-                ],
-                alignment=ft.MainAxisAlignment.SPACE_AROUND,
-                vertical_alignment=ft.CrossAxisAlignment.CENTER
-            )
-
+            # --- Separate thin header container for Profile ---
             header_container_profile = ft.Container(
-                content=profile_header,
+                content=ft.Row(
+                    [
+                        ft.ElevatedButton(
+                            "Home",
+                            on_click=lambda e: page.go("/"),
+                            bgcolor="#00A8CC",
+                            color=ft.Colors.WHITE,
+                            width=100,
+                        ),
+                        ft.ElevatedButton(
+                            "Logout",
+                            on_click=lambda e: page.go("/login"),
+                            bgcolor="#DC3545",
+                            color=ft.Colors.WHITE,
+                            width=100,
+                        ),
+                    ],
+                    alignment=ft.MainAxisAlignment.SPACE_AROUND,
+                    vertical_alignment=ft.CrossAxisAlignment.CENTER
+                ),
+                height=25,
                 padding=3,
                 bgcolor="#E6E6E6",
-                height=25,   # thin header
                 expand=True
             )
 
@@ -274,8 +271,8 @@ def main(page: ft.Page):
                 ft.View(
                     "/profile",
                     [
-                        header_container_profile,  # <-- thin full-width header
-                        form_container             # centered profile content
+                        header_container_profile,  # <-- header is fully separate
+                        form_container             # profile content
                     ],
                     bgcolor="#CBD4E0",
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
