@@ -95,7 +95,7 @@ def main(page: ft.Page):
         )
         page.views.append(
             ft.View(
-                "/"
+                "/",
                 [form_container],
                 bgcolor="#CBD4E0",
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
