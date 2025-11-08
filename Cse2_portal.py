@@ -9,6 +9,16 @@ form_container = ft.Container(
     bgcolor="#FFFFFF"
 )
 
+# ---------------- Scrollable wrapper ----------------
+def make_scrollable(content):
+    return ft.Container(
+        content=content,
+        expand=True,
+        scroll=ft.ScrollMode.AUTO,
+        padding=10,
+        bgcolor="#F8F8F8"
+    )
+
 def main(page: ft.Page):
     page.title = "CSE2 Student Portal"
     page.window_width = 400
@@ -56,7 +66,6 @@ def main(page: ft.Page):
             logged_in_student = page.session.get("student")
 
             if logged_in_student:
-                # Header for logged-in users
                 header_buttons = [
                     ft.ElevatedButton(
                         "Profile",
@@ -86,7 +95,6 @@ def main(page: ft.Page):
                     ),
                 ]
             else:
-                # Header for visitors (not logged in)
                 header_buttons = [
                     ft.ElevatedButton(
                         "Login",
@@ -123,13 +131,15 @@ def main(page: ft.Page):
                 expand=True
             )
 
-            form_container.content = ft.Column(
+            # Scrollable content for Home page
+            home_content = ft.Column(
                 [header_container],
-                spacing=0,
-                expand=True,
+                spacing=10,
                 alignment=ft.MainAxisAlignment.START,
                 horizontal_alignment=ft.CrossAxisAlignment.STRETCH
             )
+
+            form_container.content = make_scrollable(home_content)
 
             page.views.append(
                 ft.View(
@@ -147,7 +157,7 @@ def main(page: ft.Page):
                 for student in students_info:
                     if student["username"] == username.value and student["password"] == password.value:
                         page.session.set("student", student)
-                        page.go("/profile")
+                        page.go("/")
                         return
                 error_message.value = "❌ Invalid username or password"
                 page.update()
@@ -175,7 +185,7 @@ def main(page: ft.Page):
                 on_submit=login_action
             )
 
-            form_container.content = ft.Column(
+            login_content = ft.Column(
                 [
                     ft.Image(
                         src="University_Logo.png",
@@ -200,6 +210,8 @@ def main(page: ft.Page):
                 spacing=10,
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             )
+
+            form_container.content = make_scrollable(login_content)
 
             page.views.append(
                 ft.View(
@@ -240,7 +252,6 @@ def main(page: ft.Page):
             file_picker = ft.FilePicker(on_result=change_photo)
             page.overlay.append(file_picker)
 
-            # ---------------- PROFILE HEADER ----------------
             profile_header = ft.Row(
                 [
                     ft.ElevatedButton(
@@ -270,36 +281,7 @@ def main(page: ft.Page):
                 expand=True
             )
 
-            # ---------------- DYNAMIC GROUP MEMBERS ----------------
-            group_name = student.get("group", "None")
-            group_members = [
-                s['full_name'] for s in students_info
-                if s.get("group") == group_name and s["username"] != student["username"]
-            ]
-            members_section = ft.Column(
-                [
-                    ft.Text("👥 Group Members", size=18, weight="bold", color=ft.Colors.BLACK),
-                    ft.Column([ft.Text(f"- {m}", color=ft.Colors.BLACK) for m in group_members])
-                ],
-                spacing=5,
-                alignment=ft.MainAxisAlignment.START,
-                horizontal_alignment=ft.CrossAxisAlignment.START
-            )
-
-            # ---------------- DYNAMIC COURSES ----------------
-            courses = student.get("courses", [])
-            courses_section = ft.Column(
-                [
-                    ft.Text("📚 My Courses", size=18, weight="bold", color=ft.Colors.BLACK),
-                    ft.Column([ft.Text(f"- {c}", color=ft.Colors.BLACK) for c in courses])
-                ],
-                spacing=5,
-                alignment=ft.MainAxisAlignment.START,
-                horizontal_alignment=ft.CrossAxisAlignment.START
-            )
-
-            # ---------------- FINAL PROFILE LAYOUT ----------------
-            form_container.content = ft.Column(
+            profile_content = ft.Column(
                 [
                     header_container_profile,
                     ft.Text(PROMO_NAME, size=18, color=ft.Colors.BLACK),
@@ -327,12 +309,12 @@ def main(page: ft.Page):
                     ft.Text(f"{student['full_name']} {emoji}", size=22, weight="bold", color=ft.Colors.BLACK),
                     ft.Text(f"Major: {PROMO_MAJOR}", color=ft.Colors.BLACK),
                     ft.Text(f"University: {UNIVERSITY_NAME}", color=ft.Colors.BLACK),
-                    members_section,
-                    courses_section
                 ],
                 spacing=10,
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             )
+
+            form_container.content = make_scrollable(profile_content)
 
             page.views.append(
                 ft.View(
@@ -346,7 +328,7 @@ def main(page: ft.Page):
 
         # ---------------- UNIVERSITY PAGE ----------------
         elif page.route == "/university":
-            form_container.content = ft.Column(
+            university_content = ft.Column(
                 [
                     ft.Text("🏫 Welcome to the University Page", size=22, weight="bold", color=ft.Colors.BLACK),
                     ft.Text("This is where university details will appear.", size=16, color=ft.Colors.BLACK),
@@ -361,6 +343,8 @@ def main(page: ft.Page):
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 spacing=20
             )
+
+            form_container.content = make_scrollable(university_content)
 
             page.views.append(
                 ft.View(
