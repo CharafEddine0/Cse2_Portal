@@ -53,6 +53,7 @@ def main(page: ft.Page):
     # ---------------- ROUTES ----------------
     def route_change(e):
         page.views.clear()
+
         # ---------------- HOME PAGE ----------------
         if page.route == "/":
             # Header row: Login, Courses, Support
@@ -85,22 +86,29 @@ def main(page: ft.Page):
             # Header container (thinner)
             header_container = ft.Container(
                 content=header,
-                padding=5,  # less padding
+                padding=5,
                 bgcolor="#E6E6E6",
-                height=40,  # reduced height
+                height=40,
                 width=400
             )
 
-            # Column for Home Page (currently just header)
+            # Column for Home Page (just header for now)
             form_container.content = ft.Column(
                 [
                     header_container
-                    # Additional sections can be added below
                 ],
                 spacing=0,
                 expand=True,
                 alignment=ft.MainAxisAlignment.START,
                 horizontal_alignment=ft.CrossAxisAlignment.STRETCH
+            )
+
+            page.views.append(
+                ft.View(
+                    "/",
+                    [form_container],
+                    bgcolor="#CBD4E0"
+                )
             )
 
         # ---------------- LOGIN PAGE ----------------
@@ -143,7 +151,7 @@ def main(page: ft.Page):
             form_container.content = ft.Column(
                 [
                     ft.Image(
-                        src="University_Logo.png",  # filename in assets_dir
+                        src="University_Logo.png",
                         width=300,
                         height=150,
                         fit=ft.ImageFit.CONTAIN
@@ -186,7 +194,7 @@ def main(page: ft.Page):
             emoji = "👩" if student.get("gender") == "female" else "👨"
 
             student_pfp = ft.Image(
-                src=student["photo"],  # filename only, loads from assets_dir
+                src=student["photo"],
                 width=150,
                 height=150,
                 border_radius=75,
@@ -205,30 +213,39 @@ def main(page: ft.Page):
             file_picker = ft.FilePicker(on_result=change_photo)
             page.overlay.append(file_picker)
 
-            # Profile container content
+            # Profile container content with thinner header
+            profile_header = ft.Row(
+                [
+                    ft.ElevatedButton(
+                        "Home",
+                        on_click=lambda e: page.go("/"),
+                        bgcolor="#00A8CC",
+                        color=ft.Colors.WHITE,
+                        width=100,
+                    ),
+                    ft.ElevatedButton(
+                        "Logout",
+                        on_click=lambda e: page.go("/login"),
+                        bgcolor="#DC3545",
+                        color=ft.Colors.WHITE,
+                        width=100,
+                    ),
+                ],
+                alignment=ft.MainAxisAlignment.SPACE_AROUND,
+                vertical_alignment=ft.CrossAxisAlignment.CENTER
+            )
+
+            header_container_profile = ft.Container(
+                content=profile_header,
+                padding=5,
+                bgcolor="#E6E6E6",
+                height=40,
+                width=400
+            )
+
             form_container.content = ft.Column(
                 [
-                    # Header row for Profile (Back Home + Logout)
-                    ft.Row(
-                        [
-                            ft.ElevatedButton(
-                                "Home",
-                                on_click=lambda e: page.go("/"),
-                                bgcolor="#00A8CC",
-                                color=ft.Colors.WHITE,
-                                width=100,
-                            ),
-                            ft.ElevatedButton(
-                                "Logout",
-                                on_click=lambda e: page.go("/login"),
-                                bgcolor="#DC3545",
-                                color=ft.Colors.WHITE,
-                                width=100,
-                            ),
-                        ],
-                        alignment=ft.MainAxisAlignment.SPACE_AROUND,
-                        vertical_alignment=ft.CrossAxisAlignment.CENTER
-                    ),
+                    header_container_profile,
                     ft.Text(PROMO_NAME, size=18, color=ft.Colors.BLACK),
                     student_pfp,
                     ft.Row(
@@ -274,5 +291,5 @@ def main(page: ft.Page):
     page.on_route_change = route_change
     page.go("/")
 
-# Run the app in web browser with assets_dir pointing to your assets folder
+# Run the app
 ft.app(target=main, view=ft.WEB_BROWSER, assets_dir="User_Data/assets")
