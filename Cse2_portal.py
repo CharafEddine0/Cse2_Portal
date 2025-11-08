@@ -48,60 +48,69 @@ def main(page: ft.Page):
         # Save updated student data
         with open("Cse2_Students.json", "w") as students_data_file:
             json.dump(students_info, students_data_file, indent=4)
-
     # ---------------- ROUTES ----------------
     def route_change(e):
         page.views.clear()
         # ---------------- HOME PAGE ----------------
-        form_container.content = ft.Container(
-            content=ft.Column(
+        if page.route == "/":
+            # Header Row: buttons + support info
+            header = ft.Row(
                 [
                     ft.ElevatedButton(
                         "Login",
                         on_click=lambda e: page.go("/login"),
                         bgcolor="#00A8CC",
                         color=ft.Colors.WHITE,
-                        width=200,
-                        height=50,
+                        width=100,
                     ),
                     ft.ElevatedButton(
                         "Courses",
-                        on_click=lambda e: page.go("/courses"),
+                        on_click=lambda e: page.go("/courses"),  # placeholder for future page
                         bgcolor="#007BFF",
                         color=ft.Colors.WHITE,
-                        width=200,
-                        height=50,
+                        width=100,
                     ),
                     ft.Text(
-                        "Support:\nPhone: +213 556 68 85 75\nEmail: elearning@univ-guelma.dz",
-                        size=14,
+                        "Support: +213 556 68 85 75 | elearning@univ-guelma.dz",
                         color=ft.Colors.BLACK,
-                        text_align=ft.TextAlign.CENTER,
+                        size=14,
                     )
                 ],
-                spacing=20,
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                alignment=ft.MainAxisAlignment.CENTER,
-            ),
-            width=400,
-            height=500,
-            padding=20,
-            border_radius=14,
-            alignment=ft.alignment.center,
-            image=ft.Image(
-                src="University_Background.png",
-                fit=ft.ImageFit.COVER,
-            )
-        )
-        page.views.append(
-            ft.View(
-                "/",
-                [form_container],
-                bgcolor="#CBD4E0",
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                alignment=ft.MainAxisAlignment.SPACE_AROUND,
                 vertical_alignment=ft.CrossAxisAlignment.CENTER,
             )
-        )
+
+            # Wrap header in a container for padding/background
+            header_container = ft.Container(
+                content=header,
+                padding=10,
+                bgcolor="#E6E6E6",  # optional header background color
+            )
+
+            # Background image container (fills rest of the page)
+            background_container = ft.Container(
+                expand=True,  # fills remaining vertical space
+                image=ft.Image(
+                    src="University_Background.png",  # your image file in assets_dir
+                    fit=ft.ImageFit.COVER,  # cover full container without stretching
+                )
+            )
+            # Combine header + background
+            form_container.content = ft.Column(
+                [
+                    header_container,
+                    background_container,
+                ],
+                spacing=0,  # no extra space between header and image
+            )
+            # Add the view
+            page.views.append(
+                ft.View(
+                    "/",
+                    [form_container],
+                    bgcolor="#CBD4E0",  # fallback background color
+                )
+            )
         # ---------------- LOGIN PAGE ----------------
         if page.route == "/login":
 
