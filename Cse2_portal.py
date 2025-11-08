@@ -48,7 +48,7 @@ def main(page: ft.Page):
     def route_change(e):
         page.views.clear()
 
-        # ---------------- Thin Header (full width, independent) ----------------
+        # ---------------- Extra Thin Header (10px, full width) ----------------
         header_container = ft.Container(
             content=ft.Row(
                 [
@@ -82,10 +82,10 @@ def main(page: ft.Page):
                 alignment=ft.MainAxisAlignment.SPACE_AROUND,
                 vertical_alignment=ft.CrossAxisAlignment.CENTER
             ),
-            height=15,  # THIN HEADER
+            height=10,  # extra thin
             expand=True,
             bgcolor="#E6E6E6",
-            padding=2
+            padding=1
         )
 
         # ---------------- HOME PAGE ----------------
