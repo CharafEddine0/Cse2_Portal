@@ -48,44 +48,52 @@ def main(page: ft.Page):
     def route_change(e):
         page.views.clear()
 
-        # ---------------- Extra Thin Header (10px, full width) ----------------
+        # ---------------- Thin Header (25px) ----------------
         header_container = ft.Container(
             content=ft.Row(
                 [
                     ft.ElevatedButton(
                         "Home",
                         on_click=lambda e: page.go("/"),
-                        width=70,
+                        width=60,
+                        height=20,
                         bgcolor="#00A8CC",
-                        color=ft.Colors.WHITE
+                        color=ft.Colors.WHITE,
+                        padding=0
                     ),
                     ft.ElevatedButton(
                         "Login",
                         on_click=lambda e: page.go("/login"),
-                        width=70,
+                        width=60,
+                        height=20,
                         bgcolor="#007BFF",
-                        color=ft.Colors.WHITE
+                        color=ft.Colors.WHITE,
+                        padding=0
                     ),
                     ft.ElevatedButton(
                         "Courses",
                         on_click=lambda e: page.go("/courses"),
-                        width=70,
+                        width=60,
+                        height=20,
                         bgcolor="#28A745",
-                        color=ft.Colors.WHITE
+                        color=ft.Colors.WHITE,
+                        padding=0
                     ),
                     ft.Text(
                         "Support: +213 556 68 85 75 | elearning@univ-guelma.dz",
-                        size=12,
+                        size=10,
                         color=ft.Colors.BLACK
                     )
                 ],
                 alignment=ft.MainAxisAlignment.SPACE_AROUND,
-                vertical_alignment=ft.CrossAxisAlignment.CENTER
+                vertical_alignment=ft.CrossAxisAlignment.CENTER,
+                spacing=5
             ),
-            height=10,  # extra thin
+            height=25,  # thin header
             expand=True,
             bgcolor="#E6E6E6",
-            padding=1
+            padding=2,
+            clip_behavior=ft.ClipBehavior.HARD_EDGE
         )
 
         # ---------------- HOME PAGE ----------------
@@ -126,7 +134,7 @@ def main(page: ft.Page):
             form_container.content = ft.Column(
                 [
                     ft.Image(
-                        src="University_Logo.png",  # logo visible
+                        src="University_Logo.png",
                         width=200,
                         height=100,
                         fit=ft.ImageFit.CONTAIN
