@@ -52,7 +52,47 @@ def main(page: ft.Page):
     # ---------------- ROUTES ----------------
     def route_change(e):
         page.views.clear()
-
+        # ---------------- HOME PAGE ----------------
+        form_container.content = ft.Container(
+            content=ft.Column(
+                [
+                    ft.ElevatedButton(
+                        "Login",
+                        on_click=lambda e: page.go("/login"),
+                        bgcolor="#00A8CC",
+                        color=ft.Colors.WHITE,
+                        width=200,
+                        height=50,
+                    ),
+                    ft.ElevatedButton(
+                        "Courses",
+                        on_click=lambda e: page.go("/courses"),
+                        bgcolor="#007BFF",
+                        color=ft.Colors.WHITE,
+                        width=200,
+                        height=50,
+                    ),
+                    ft.Text(
+                        "Support:\nPhone: +213 556 68 85 75\nEmail: elearning@univ-guelma.dz",
+                        size=14,
+                        color=ft.Colors.BLACK,
+                        text_align=ft.TextAlign.CENTER,
+                    )
+                ],
+                spacing=20,
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                alignment=ft.MainAxisAlignment.CENTER,
+            ),
+            width=400,
+            height=500,
+            padding=20,
+            border_radius=14,
+            alignment=ft.alignment.center,
+            image=ft.Image(
+                src="University_Background.png",
+                fit=ft.ImageFit.COVER,
+            )
+        )  # <-- this closes the Container
         # ---------------- LOGIN PAGE ----------------
         if page.route == "/login":
 
