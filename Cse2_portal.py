@@ -56,7 +56,6 @@ def main(page: ft.Page):
             logged_in_student = page.session.get("student")
 
             if logged_in_student:
-                # Header for logged-in users
                 header_buttons = [
                     ft.ElevatedButton(
                         "Profile",
@@ -86,7 +85,6 @@ def main(page: ft.Page):
                     ),
                 ]
             else:
-                # Header for visitors (not logged in)
                 header_buttons = [
                     ft.ElevatedButton(
                         "Login",
@@ -240,7 +238,11 @@ def main(page: ft.Page):
             file_picker = ft.FilePicker(on_result=change_photo)
             page.overlay.append(file_picker)
 
-            # Profile header with Home + Logout
+            # Example group and courses data
+            group_name = student.get("group", "None")
+            group_members = student.get("group_members", ["Member1", "Member2"])
+            courses = student.get("courses", ["Course1", "Course2"])
+
             profile_header = ft.Row(
                 [
                     ft.ElevatedButton(
@@ -270,26 +272,20 @@ def main(page: ft.Page):
                 expand=True
             )
 
-            # Group info
-            group_name = student.get("group", "Not assigned")
-            group_members = [s['full_name'] for s in students_info if s.get("group") == group_name]
-
             members_section = ft.Column(
                 [
-                    ft.Text("👥 Group Members", size=18, weight="bold"),
-                    ft.Column([ft.Text(f"- {m}") for m in group_members])
+                    ft.Text("👥 Group Members", size=18, weight="bold", color=ft.Colors.BLACK),
+                    ft.Column([ft.Text(f"- {m}", color=ft.Colors.BLACK) for m in group_members])
                 ],
                 spacing=5,
                 alignment=ft.MainAxisAlignment.START,
                 horizontal_alignment=ft.CrossAxisAlignment.START
             )
 
-            # My Courses placeholder
-            courses = ["Mathematical Analysis", "Introduction to information systems", "Algorithms and data structures"]
             mycourses_section = ft.Column(
                 [
-                    ft.Text("📚 My Courses", size=18, weight="bold"),
-                    ft.Column([ft.Text(f"- {c}") for c in courses])
+                    ft.Text("📚 My Courses", size=18, weight="bold", color=ft.Colors.BLACK),
+                    ft.Column([ft.Text(f"- {c}", color=ft.Colors.BLACK) for c in courses])
                 ],
                 spacing=5,
                 alignment=ft.MainAxisAlignment.START,
@@ -346,8 +342,8 @@ def main(page: ft.Page):
         elif page.route == "/university":
             form_container.content = ft.Column(
                 [
-                    ft.Text("🏫 Welcome to the University Page", size=22, weight="bold"),
-                    ft.Text("This is where university details will appear.", size=16),
+                    ft.Text("🏫 Welcome to the University Page", size=22, weight="bold", color=ft.Colors.BLACK),
+                    ft.Text("This is where university details will appear.", size=16, color=ft.Colors.BLACK),
                     ft.ElevatedButton(
                         "Back to Home",
                         on_click=lambda e: page.go("/"),
