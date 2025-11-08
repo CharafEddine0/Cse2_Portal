@@ -2,7 +2,7 @@ import flet as ft
 import json
 import os
 
-# Container for content
+# Reusable container for page content
 form_container = ft.Container(
     padding=20,
     border_radius=14,
@@ -16,7 +16,7 @@ def main(page: ft.Page):
     page.vertical_alignment = ft.alignment.center
     page.horizontal_alignment = ft.alignment.center
 
-    # Load promo info
+    # ---------------- LOAD DATA ----------------
     with open("Promo_Info.json", "r") as promo_data_file:
         promo_info = json.load(promo_data_file)
         PROMO_NAME = promo_info["promo_name"]
@@ -24,117 +24,119 @@ def main(page: ft.Page):
         UNIVERSITY_NAME = promo_info["university"]
         PROMO_YEAR = promo_info["year"]
 
-    # Load students data
     with open("Cse2_Students.json", "r") as students_data_file:
         students_info = json.load(students_data_file)
 
     DEFAULT_MALE = "male_avatar.png"
     DEFAULT_FEMALE = "female_avatar.png"
 
-    # Assign default images (ensure filename only for web)
+    # Add default images if missing
     for s in students_info:
         if not s.get("photo"):
             s["photo"] = DEFAULT_FEMALE if s.get("gender") == "female" else DEFAULT_MALE
         else:
             s["photo"] = os.path.basename(s["photo"])
 
-    # ---------------- FUNCTION TO RESET PFP ----------------
+    # ---------------- FUNCTION: RESET PROFILE PICTURE ----------------
     def reset_pfp(student, student_pfp, students_info, page):
         default_photo = DEFAULT_FEMALE if student.get("gender") == "female" else DEFAULT_MALE
         student["photo"] = default_photo
         student_pfp.src = default_photo
         page.update()
-        # Save updated student data
+        # Save updated data
         with open("Cse2_Students.json", "w") as students_data_file:
             json.dump(students_info, students_data_file, indent=4)
 
-    # ---------------- Helper to check login ----------------
-    def is_logged_in():
-        return page.session.get("student") is not None
-
-    # ---------------- Header factory (now supports status & home button) ----------------
-    def make_header(title_text, show_status=False, full_width=False):
-        # Left: logo + title
-        left = ft.Row(
-            [
-                ft.Image(src="University_Logo.png", width=32, height=32, fit=ft.ImageFit.CONTAIN),
-                ft.Text(title_text, size=18, weight="bold", color="#1B263B"),
-            ],
-            alignment=ft.MainAxisAlignment.START,
-            vertical_alignment=ft.CrossAxisAlignment.CENTER,
-            spacing=10
-        )
-
-        # Right: (optional) Home button + status
-        right_items = []
-        if show_status:
-            # Home button (goes to / but does not log out)
-            home_btn = ft.ElevatedButton(
-                "Home",
-                on_click=lambda e: page.go("/"),
-                bgcolor="#00A8CC",
-                color=ft.Colors.WHITE,
-                width=90,
-            )
-            right_items.append(home_btn)
-
-            # Login status text
-            student = page.session.get("student")
-            if student:
-                status = ft.Text(f"✅ Logged in as: {student.get('username')}", color="#198754", size=12)
-            else:
-                status = ft.Text("❌ Not logged in", color="#DC3545", size=12)
-            right_items.append(status)
-
-        right = ft.Row(
-            right_items,
-            alignment=ft.MainAxisAlignment.END,
-            vertical_alignment=ft.CrossAxisAlignment.CENTER,
-            spacing=8
-        )
-
-        # Combine into header row
-        header_row = ft.Row(
-            [left, right],
-            alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
-            vertical_alignment=ft.CrossAxisAlignment.CENTER,
-        )
-
-        return ft.Container(
-            content=header_row,
-            padding=8,
-            bgcolor="#E6E6E6",
-            border_radius=ft.border_radius.all(10) if not full_width else 0,
-            expand=full_width
-        )
-
-    # ---------------- ROUTES ----------------
+    # ---------------- ROUTE HANDLER ----------------
     def route_change(e):
         page.views.clear()
 
         # ---------------- HOME PAGE ----------------
         if page.route == "/":
-            form_container.content = ft.Column(
-                [
-                    make_header("CSE2 Student Portal", full_width=True),
-                    ft.Text("Welcome to CSE2 Student Portal", size=22, weight="bold", color="#1B263B"),
-                    ft.Image(src="University_Logo.png", width=280, height=150, fit=ft.ImageFit.CONTAIN),
-                    ft.Row(
-                        [
-                            ft.ElevatedButton("Login", on_click=lambda e: page.go("/login"), bgcolor="#00A8CC", color=ft.Colors.WHITE),
-                            ft.ElevatedButton("Courses", on_click=lambda e: page.go("/courses"), bgcolor="#007BFF", color=ft.Colors.WHITE),
-                        ],
-                        alignment=ft.MainAxisAlignment.CENTER,
+            logged_in_student = page.session.get("student")
+
+            if logged_in_student:
+                # Header for logged-in users
+                header_buttons = [
+                    ft.ElevatedButton(
+                        "Profile",
+                        on_click=lambda e: page.go("/profile"),
+                        bgcolor="#00A8CC",
+                        color=ft.Colors.WHITE,
+                        width=100,
                     ),
-                    ft.Text("Support: +213 556 68 85 75 | elearning@univ-guelma.dz", color="#2E2E2E", size=13),
-                ],
-                spacing=15,
-                alignment=ft.MainAxisAlignment.CENTER,
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                    ft.ElevatedButton(
+                        "Courses",
+                        on_click=lambda e: page.go("/courses"),
+                        bgcolor="#007BFF",
+                        color=ft.Colors.WHITE,
+                        width=100,
+                    ),
+                    ft.ElevatedButton(
+                        "Logout",
+                        on_click=lambda e: (page.session.clear(), page.go("/")),
+                        bgcolor="#DC3545",
+                        color=ft.Colors.WHITE,
+                        width=100,
+                    ),
+                    ft.Text(
+                        f"✅ Logged in as {logged_in_student['username']}",
+                        color=ft.Colors.BLACK,
+                        size=14,
+                    ),
+                ]
+            else:
+                # Header for visitors (not logged in)
+                header_buttons = [
+                    ft.ElevatedButton(
+                        "Login",
+                        on_click=lambda e: page.go("/login"),
+                        bgcolor="#00A8CC",
+                        color=ft.Colors.WHITE,
+                        width=100,
+                    ),
+                    ft.ElevatedButton(
+                        "University",
+                        on_click=lambda e: page.go("/university"),
+                        bgcolor="#6C63FF",
+                        color=ft.Colors.WHITE,
+                        width=100,
+                    ),
+                    ft.Text(
+                        "Support: +213 556 68 85 75 | elearning@univ-guelma.dz",
+                        color=ft.Colors.BLACK,
+                        size=14,
+                    ),
+                ]
+
+            header = ft.Row(
+                header_buttons,
+                alignment=ft.MainAxisAlignment.SPACE_AROUND,
+                vertical_alignment=ft.CrossAxisAlignment.CENTER,
+            )
+
+            header_container = ft.Container(
+                content=header,
+                padding=5,
+                bgcolor="#E6E6E6",
+                height=40,
+                expand=True
+            )
+
+            form_container.content = ft.Column(
+                [header_container],
+                spacing=0,
+                expand=True,
+                alignment=ft.MainAxisAlignment.START,
+                horizontal_alignment=ft.CrossAxisAlignment.STRETCH
             )
 
             page.views.append(
-                ft.View("/", [form_container], bgcolor="#CBD4E0")
+                ft.View(
+                    "/",
+                    [form_container],
+                    bgcolor="#CBD4E0"
+                )
             )
 
         # ---------------- LOGIN PAGE ----------------
@@ -145,7 +147,7 @@ def main(page: ft.Page):
                 for student in students_info:
                     if student["username"] == username.value and student["password"] == password.value:
                         page.session.set("student", student)
-                        page.go("/profile")
+                        page.go("/")
                         return
                 error_message.value = "❌ Invalid username or password"
                 page.update()
@@ -175,7 +177,13 @@ def main(page: ft.Page):
 
             form_container.content = ft.Column(
                 [
-                    make_header("Login Page", show_status=True),
+                    ft.Image(
+                        src="University_Logo.png",
+                        width=300,
+                        height=150,
+                        fit=ft.ImageFit.CONTAIN
+                    ),
+                    ft.Text("CSE2 Student Portal", size=24, weight="bold", color=ft.Colors.BLACK),
                     username,
                     password,
                     ft.Container(
@@ -232,20 +240,44 @@ def main(page: ft.Page):
             file_picker = ft.FilePicker(on_result=change_photo)
             page.overlay.append(file_picker)
 
-            # Logout action that clears session and navigates to login
-            def logout_action(e):
-                page.session.remove("student")
-                page.go("/login")
+            profile_header = ft.Row(
+                [
+                    ft.ElevatedButton(
+                        "Home",
+                        on_click=lambda e: page.go("/"),
+                        bgcolor="#00A8CC",
+                        color=ft.Colors.WHITE,
+                        width=100,
+                    ),
+                    ft.ElevatedButton(
+                        "Logout",
+                        on_click=lambda e: (page.session.clear(), page.go("/")),
+                        bgcolor="#DC3545",
+                        color=ft.Colors.WHITE,
+                        width=100,
+                    ),
+                ],
+                alignment=ft.MainAxisAlignment.SPACE_AROUND,
+                vertical_alignment=ft.CrossAxisAlignment.CENTER
+            )
+
+            header_container_profile = ft.Container(
+                content=profile_header,
+                padding=5,
+                bgcolor="#E6E6E6",
+                height=40,
+                expand=True
+            )
 
             form_container.content = ft.Column(
                 [
-                    make_header("My Profile", show_status=True),
+                    header_container_profile,
                     ft.Text(PROMO_NAME, size=18, color=ft.Colors.BLACK),
                     student_pfp,
                     ft.Row(
                         [
                             ft.ElevatedButton(
-                                "Change Picture",
+                                "Change Profile Picture",
                                 on_click=lambda e: file_picker.pick_files(
                                     allow_multiple=False,
                                     allowed_extensions=["png", "jpg", "jpeg"]
@@ -254,7 +286,7 @@ def main(page: ft.Page):
                                 color=ft.Colors.BLACK
                             ),
                             ft.ElevatedButton(
-                                "Reset",
+                                "Reset to Default",
                                 on_click=lambda e: reset_pfp(student, student_pfp, students_info, page),
                                 bgcolor="#E6E6E6",
                                 color=ft.Colors.BLACK
@@ -265,7 +297,6 @@ def main(page: ft.Page):
                     ft.Text(f"{student['full_name']} {emoji}", size=22, weight="bold", color=ft.Colors.BLACK),
                     ft.Text(f"Major: {PROMO_MAJOR}", color=ft.Colors.BLACK),
                     ft.Text(f"University: {UNIVERSITY_NAME}", color=ft.Colors.BLACK),
-                    ft.ElevatedButton("Logout", on_click=logout_action, bgcolor="#DC3545", color=ft.Colors.WHITE)
                 ],
                 spacing=10,
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
@@ -281,11 +312,40 @@ def main(page: ft.Page):
                 )
             )
 
+        # ---------------- UNIVERSITY PAGE ----------------
+        elif page.route == "/university":
+            # Just a placeholder for now
+            form_container.content = ft.Column(
+                [
+                    ft.Text("🏫 Welcome to the University Page", size=22, weight="bold"),
+                    ft.Text("This is where university details will appear.", size=16),
+                    ft.ElevatedButton(
+                        "Back to Home",
+                        on_click=lambda e: page.go("/"),
+                        bgcolor="#00A8CC",
+                        color=ft.Colors.WHITE
+                    )
+                ],
+                alignment=ft.MainAxisAlignment.CENTER,
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                spacing=20
+            )
+
+            page.views.append(
+                ft.View(
+                    "/university",
+                    [form_container],
+                    bgcolor="#CBD4E0",
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                    vertical_alignment=ft.MainAxisAlignment.CENTER,
+                )
+            )
+
         page.update()
 
-    # Connect router
+    # Handle routes
     page.on_route_change = route_change
     page.go("/")
 
-# Run the app in web browser with assets_dir pointing to your assets folder
+# Run the app
 ft.app(target=main, view=ft.WEB_BROWSER, assets_dir="User_Data/assets")
