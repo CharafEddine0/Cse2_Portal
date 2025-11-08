@@ -92,7 +92,16 @@ def main(page: ft.Page):
                 src="University_Background.png",
                 fit=ft.ImageFit.COVER,
             )
-        )  # <-- this closes the Container
+        )
+        page.views.append(
+            ft.View(
+                "/"
+                [form_container],
+                bgcolor="#CBD4E0",
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                vertical_alignment=ft.CrossAxisAlignment.CENTER,
+            )
+        )
         # ---------------- LOGIN PAGE ----------------
         if page.route == "/login":
 
@@ -248,7 +257,7 @@ def main(page: ft.Page):
         page.update()
 
     page.on_route_change = route_change
-    page.go("/login")
+    page.go("/")
 
 # Run the app in web browser with assets_dir pointing to your assets folder
 ft.app(target=main, view=ft.WEB_BROWSER, assets_dir="User_Data/assets")
