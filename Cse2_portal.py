@@ -2,9 +2,8 @@ import flet as ft
 import json
 import os
 
-# Container for login/profile content
+# Container for content
 form_container = ft.Container(
-    width=400,
     padding=20,
     border_radius=14,
     bgcolor="#FFFFFF"
@@ -23,6 +22,7 @@ def main(page: ft.Page):
         PROMO_NAME = promo_info["promo_name"]
         PROMO_MAJOR = promo_info["major"]
         UNIVERSITY_NAME = promo_info["university"]
+        PROMO_YEAR = promo_info["year"]
 
     # Load students data
     with open("Cse2_Students.json", "r") as students_data_file:
@@ -31,89 +31,84 @@ def main(page: ft.Page):
     DEFAULT_MALE = "male_avatar.png"
     DEFAULT_FEMALE = "female_avatar.png"
 
+    # Assign default images
     for s in students_info:
         if not s.get("photo"):
             s["photo"] = DEFAULT_FEMALE if s.get("gender") == "female" else DEFAULT_MALE
         else:
             s["photo"] = os.path.basename(s["photo"])
 
+    # ---------------- FUNCTION TO RESET PFP ----------------
     def reset_pfp(student, student_pfp, students_info, page):
         default_photo = DEFAULT_FEMALE if student.get("gender") == "female" else DEFAULT_MALE
         student["photo"] = default_photo
         student_pfp.src = default_photo
         page.update()
-        with open("Cse2_Students.json", "w") as f:
-            json.dump(students_info, f, indent=4)
+        # Save updated student data
+        with open("Cse2_Students.json", "w") as students_data_file:
+            json.dump(students_info, students_data_file, indent=4)
 
+    # ---------------- ROUTES ----------------
     def route_change(e):
         page.views.clear()
 
-        # ---------------- Thin Header (25px) ----------------
-        header_container = ft.Container(
-            content=ft.Row(
+        # ---------------- HOME PAGE ----------------
+        if page.route == "/":
+            header = ft.Row(
                 [
-                    ft.ElevatedButton(
-                        "Home",
-                        on_click=lambda e: page.go("/"),
-                        width=60,
-                        height=20,
-                        bgcolor="#00A8CC",
-                        color=ft.Colors.WHITE
-                    ),
                     ft.ElevatedButton(
                         "Login",
                         on_click=lambda e: page.go("/login"),
-                        width=60,
-                        height=20,
-                        bgcolor="#007BFF",
-                        color=ft.Colors.WHITE
+                        bgcolor="#00A8CC",
+                        color=ft.Colors.WHITE,
+                        width=100,
                     ),
                     ft.ElevatedButton(
                         "Courses",
                         on_click=lambda e: page.go("/courses"),
-                        width=60,
-                        height=20,
-                        bgcolor="#28A745",
-                        color=ft.Colors.WHITE
+                        bgcolor="#007BFF",
+                        color=ft.Colors.WHITE,
+                        width=100,
                     ),
                     ft.Text(
                         "Support: +213 556 68 85 75 | elearning@univ-guelma.dz",
-                        size=10,
-                        color=ft.Colors.BLACK
-                    )
+                        color=ft.Colors.BLACK,
+                        size=14,
+                    ),
                 ],
                 alignment=ft.MainAxisAlignment.SPACE_AROUND,
                 vertical_alignment=ft.CrossAxisAlignment.CENTER,
-                spacing=5
-            ),
-            height=10,  # thin header
-            expand=True,
-            bgcolor="#E6E6E6",
-            clip_behavior=ft.ClipBehavior.HARD_EDGE
-        )
-
-        # ---------------- HOME PAGE ----------------
-        if page.route == "/":
-            home_content = ft.Column(
-                [
-                    ft.Text("Welcome to CSE2 Portal!", size=24, weight="bold"),
-                    ft.Text(f"Promo: {PROMO_NAME} | Major: {PROMO_MAJOR}", size=16)
-                ],
-                alignment=ft.MainAxisAlignment.CENTER,
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                expand=True
             )
+
+            header_container = ft.Container(
+                content=header,
+                padding=5,
+                bgcolor="#E6E6E6",
+                height=40,
+                expand=True  # fills full width
+            )
+
+            form_container.content = ft.Column(
+                [
+                    header_container
+                ],
+                spacing=0,
+                expand=True,
+                alignment=ft.MainAxisAlignment.START,
+                horizontal_alignment=ft.CrossAxisAlignment.STRETCH
+            )
+
             page.views.append(
                 ft.View(
                     "/",
-                    [header_container, home_content],
+                    [form_container],
                     bgcolor="#CBD4E0"
                 )
             )
 
         # ---------------- LOGIN PAGE ----------------
         elif page.route == "/login":
-            error_message = ft.Text("", color=ft.Colors.RED)
+            error_message = ft.Text("", color="#DC3545")
 
             def login_action(e):
                 for student in students_info:
@@ -124,34 +119,62 @@ def main(page: ft.Page):
                 error_message.value = "❌ Invalid username or password"
                 page.update()
 
-            username = ft.TextField(label="Username", on_submit=lambda e: password.focus())
-            password = ft.TextField(label="Password", password=True, on_submit=login_action)
+            username = ft.TextField(
+                label="Username",
+                autofocus=True,
+                color=ft.Colors.BLACK,
+                label_style=ft.TextStyle(color=ft.Colors.BLACK),
+                border_color="#778DA9",
+                focused_border_color="#00A8CC",
+                bgcolor="#E6E6E6",
+                on_submit=lambda e: password.focus()
+            )
+
+            password = ft.TextField(
+                label="Password",
+                password=True,
+                can_reveal_password=True,
+                color=ft.Colors.BLACK,
+                label_style=ft.TextStyle(color=ft.Colors.BLACK),
+                border_color="#778DA9",
+                focused_border_color="#00A8CC",
+                bgcolor="#E6E6E6",
+                on_submit=login_action
+            )
 
             form_container.content = ft.Column(
                 [
                     ft.Image(
                         src="University_Logo.png",
-                        width=200,
-                        height=100,
+                        width=300,
+                        height=150,
                         fit=ft.ImageFit.CONTAIN
                     ),
-                    ft.Text("CSE2 Student Portal", size=24, weight="bold"),
+                    ft.Text("CSE2 Student Portal", size=24, weight="bold", color=ft.Colors.BLACK),
                     username,
                     password,
-                    ft.ElevatedButton("Login", on_click=login_action),
-                    error_message
+                    ft.Container(
+                        ft.ElevatedButton(
+                            "Login",
+                            on_click=login_action,
+                            bgcolor="#E6E6E6",
+                            color=ft.Colors.BLACK
+                        ),
+                        alignment=ft.alignment.top_left
+                    ),
+                    error_message,
                 ],
                 spacing=10,
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             )
 
             page.views.append(
                 ft.View(
                     "/login",
-                    [header_container, form_container],
+                    [form_container],
                     bgcolor="#CBD4E0",
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                    vertical_alignment=ft.MainAxisAlignment.CENTER
+                    vertical_alignment=ft.MainAxisAlignment.CENTER,
                 )
             )
 
@@ -164,39 +187,95 @@ def main(page: ft.Page):
 
             emoji = "👩" if student.get("gender") == "female" else "👨"
 
-            student_pfp = ft.Image(src=student["photo"], width=150, height=150, border_radius=75)
+            student_pfp = ft.Image(
+                src=student["photo"],
+                width=150,
+                height=150,
+                border_radius=75,
+                fit=ft.ImageFit.COVER
+            )
+
+            def change_photo(e):
+                if e.files:
+                    new_photo_path = e.files[0].path
+                    student["photo"] = os.path.basename(new_photo_path)
+                    student_pfp.src = student["photo"]
+                    page.update()
+                    with open("Cse2_Students.json", "w") as students_data_file:
+                        json.dump(students_info, students_data_file, indent=4)
+
+            file_picker = ft.FilePicker(on_result=change_photo)
+            page.overlay.append(file_picker)
+
+            profile_header = ft.Row(
+                [
+                    ft.ElevatedButton(
+                        "Home",
+                        on_click=lambda e: page.go("/"),
+                        bgcolor="#00A8CC",
+                        color=ft.Colors.WHITE,
+                        width=100,
+                    ),
+                    ft.ElevatedButton(
+                        "Logout",
+                        on_click=lambda e: page.go("/login"),
+                        bgcolor="#DC3545",
+                        color=ft.Colors.WHITE,
+                        width=100,
+                    ),
+                ],
+                alignment=ft.MainAxisAlignment.SPACE_AROUND,
+                vertical_alignment=ft.CrossAxisAlignment.CENTER
+            )
+
+            header_container_profile = ft.Container(
+                content=profile_header,
+                padding=5,
+                bgcolor="#E6E6E6",
+                height=40,
+                expand=True  # full width
+            )
 
             form_container.content = ft.Column(
                 [
-                    ft.Text(f"{student['full_name']} {emoji}", size=22, weight="bold"),
+                    header_container_profile,
+                    ft.Text(PROMO_NAME, size=18, color=ft.Colors.BLACK),
                     student_pfp,
-                    ft.Text(f"Major: {PROMO_MAJOR}"),
-                    ft.Text(f"University: {UNIVERSITY_NAME}"),
                     ft.Row(
                         [
                             ft.ElevatedButton(
-                                "Change PFP",
-                                on_click=lambda e: page.snack_bar.show("Change photo feature...")
+                                "Change Profile Picture",
+                                on_click=lambda e: file_picker.pick_files(
+                                    allow_multiple=False,
+                                    allowed_extensions=["png", "jpg", "jpeg"]
+                                ),
+                                bgcolor="#E6E6E6",
+                                color=ft.Colors.BLACK
                             ),
                             ft.ElevatedButton(
-                                "Reset PFP",
-                                on_click=lambda e: reset_pfp(student, student_pfp, students_info, page)
-                            )
+                                "Reset to Default",
+                                on_click=lambda e: reset_pfp(student, student_pfp, students_info, page),
+                                bgcolor="#E6E6E6",
+                                color=ft.Colors.BLACK
+                            ),
                         ],
-                        alignment=ft.MainAxisAlignment.CENTER
-                    )
+                        alignment=ft.MainAxisAlignment.CENTER,
+                    ),
+                    ft.Text(f"{student['full_name']} {emoji}", size=22, weight="bold", color=ft.Colors.BLACK),
+                    ft.Text(f"Major: {PROMO_MAJOR}", color=ft.Colors.BLACK),
+                    ft.Text(f"University: {UNIVERSITY_NAME}", color=ft.Colors.BLACK),
                 ],
                 spacing=10,
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             )
 
             page.views.append(
                 ft.View(
                     "/profile",
-                    [header_container, form_container],
+                    [form_container],
                     bgcolor="#CBD4E0",
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                    vertical_alignment=ft.MainAxisAlignment.CENTER
+                    vertical_alignment=ft.MainAxisAlignment.CENTER,
                 )
             )
 
