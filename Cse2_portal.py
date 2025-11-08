@@ -4,11 +4,9 @@ import os
 
 # Container for content
 form_container = ft.Container(
-    width=400,
-    height=500,
     padding=20,
     border_radius=14,
-    bgcolor="#FFFFFF"  # Snow white container
+    bgcolor="#FFFFFF"
 )
 
 def main(page: ft.Page):
@@ -56,7 +54,6 @@ def main(page: ft.Page):
 
         # ---------------- HOME PAGE ----------------
         if page.route == "/":
-            # Header row: Login, Courses, Support
             header = ft.Row(
                 [
                     ft.ElevatedButton(
@@ -83,16 +80,14 @@ def main(page: ft.Page):
                 vertical_alignment=ft.CrossAxisAlignment.CENTER,
             )
 
-            # Header container (thinner)
             header_container = ft.Container(
                 content=header,
                 padding=5,
                 bgcolor="#E6E6E6",
                 height=40,
-                width=400
+                expand=True  # fills full width
             )
 
-            # Column for Home Page (just header for now)
             form_container.content = ft.Column(
                 [
                     header_container
@@ -147,7 +142,6 @@ def main(page: ft.Page):
                 on_submit=login_action
             )
 
-            # Container content for login
             form_container.content = ft.Column(
                 [
                     ft.Image(
@@ -213,7 +207,6 @@ def main(page: ft.Page):
             file_picker = ft.FilePicker(on_result=change_photo)
             page.overlay.append(file_picker)
 
-            # Profile container content with thinner header
             profile_header = ft.Row(
                 [
                     ft.ElevatedButton(
@@ -240,7 +233,7 @@ def main(page: ft.Page):
                 padding=5,
                 bgcolor="#E6E6E6",
                 height=40,
-                width=400
+                expand=True  # full width
             )
 
             form_container.content = ft.Column(
