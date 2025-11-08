@@ -52,6 +52,7 @@ def main(page: ft.Page):
 
         # ---------------- HOME PAGE ----------------
         if page.route == "/":
+            # Thin full-width header
             header = ft.Row(
                 [
                     ft.ElevatedButton(
@@ -83,7 +84,7 @@ def main(page: ft.Page):
                 padding=3,
                 bgcolor="#E6E6E6",
                 height=25,    # thin header
-                expand=True
+                expand=True    # full width
             )
 
             home_content = ft.Column(
@@ -207,6 +208,7 @@ def main(page: ft.Page):
             file_picker = ft.FilePicker(on_result=change_photo)
             page.overlay.append(file_picker)
 
+            # Thin full-width header for Profile
             profile_header = ft.Row(
                 [
                     ft.ElevatedButton(
@@ -232,7 +234,7 @@ def main(page: ft.Page):
                 content=profile_header,
                 padding=3,
                 bgcolor="#E6E6E6",
-                height=25,    # thin header
+                height=25,   # thin header
                 expand=True
             )
 
@@ -272,8 +274,8 @@ def main(page: ft.Page):
                 ft.View(
                     "/profile",
                     [
-                        header_container_profile,  # full width, thin header
-                        form_container             # centered content
+                        header_container_profile,  # <-- thin full-width header
+                        form_container             # centered profile content
                     ],
                     bgcolor="#CBD4E0",
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
