@@ -51,9 +51,8 @@ def main(page: ft.Page):
     # ---------------- ROUTES ----------------
     def route_change(e):
         page.views.clear()
-        # ---------------- HOME PAGE ----------------
+        # Home Page
         if page.route == "/":
-            # header row
             header = ft.Row(
                 [
                     ft.ElevatedButton(
@@ -84,6 +83,7 @@ def main(page: ft.Page):
                 content=header,
                 padding=10,
                 bgcolor="#E6E6E6",
+                height=60
             )
 
             background_container = ft.Container(
@@ -94,14 +94,13 @@ def main(page: ft.Page):
                 )
             )
 
-            # use the global container
             form_container.content = ft.Column(
                 [
                     header_container,
                     background_container,
                 ],
                 spacing=0,
-                expand=True,
+                expand=True
             )
 
             page.views.append(
