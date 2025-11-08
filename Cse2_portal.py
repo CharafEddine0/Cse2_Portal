@@ -9,14 +9,14 @@ form_container = ft.Container(
     bgcolor="#FFFFFF"
 )
 
+# ---------------- SCROLLABLE WRAPPER ----------------
 def make_scrollable(content_list):
     """Wrap content in a scrollable ListView."""
     return ft.ListView(
         controls=content_list,
         expand=True,
         padding=10,
-        spacing=10,
-        scroll="auto"
+        spacing=10
     )
 
 def main(page: ft.Page):
@@ -130,7 +130,9 @@ def main(page: ft.Page):
                 expand=True
             )
 
-            home_content = [header_container]  # Add other home content here if needed
+            home_content = [header_container]
+
+            # Wrap content in scrollable ListView
             form_container.content = make_scrollable(home_content)
 
             page.views.append(
