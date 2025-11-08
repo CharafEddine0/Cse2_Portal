@@ -53,10 +53,9 @@ def main(page: ft.Page):
     # ---------------- ROUTES ----------------
     def route_change(e):
         page.views.clear()
-
         # ---------------- HOME PAGE ----------------
         if page.route == "/":
-            # Header row: Login, Courses, Support
+            # Header row
             header = ft.Row(
                 [
                     ft.ElevatedButton(
@@ -77,7 +76,7 @@ def main(page: ft.Page):
                         "Support: +213 556 68 85 75 | elearning@univ-guelma.dz",
                         color=ft.Colors.BLACK,
                         size=14,
-                    ),
+                    )
                 ],
                 alignment=ft.MainAxisAlignment.SPACE_AROUND,
                 vertical_alignment=ft.CrossAxisAlignment.CENTER,
@@ -87,27 +86,36 @@ def main(page: ft.Page):
                 content=header,
                 padding=10,
                 bgcolor="#E6E6E6",
-                height=60,
-                width=400
+                expand=True  # full width
             )
 
-            # Column for Home Page (currently just header)
-            form_container.content = ft.Column(
-                [
-                    header_container
-                    # Additional sections can be added below
-                ],
-                spacing=0,
+            background_container = ft.Container(
                 expand=True,
-                alignment=ft.MainAxisAlignment.START,
-                horizontal_alignment=ft.CrossAxisAlignment.STRETCH
+                image=ft.Image(
+                    src="University_Background.png",
+                    fit=ft.ImageFit.COVER,
+                )
+            )
+
+            # Full page container
+            home_container = ft.Container(
+                expand=True,
+                content=ft.Column(
+                    [
+                        header_container,
+                        background_container,
+                    ],
+                    spacing=0,
+                    expand=True,
+                    horizontal_alignment=ft.CrossAxisAlignment.STRETCH,  # make header + background stretch
+                )
             )
 
             page.views.append(
                 ft.View(
                     "/",
-                    [form_container],
-                    bgcolor="#CBD4E0"
+                    [home_container],
+                    bgcolor="#CBD4E0",
                 )
             )
 
