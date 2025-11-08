@@ -51,8 +51,9 @@ def main(page: ft.Page):
     # ---------------- ROUTES ----------------
     def route_change(e):
         page.views.clear()
-        # Home Page
+        # ---------------- HOME PAGE ----------------
         if page.route == "/":
+            # Header row
             header = ft.Row(
                 [
                     ft.ElevatedButton(
@@ -83,33 +84,36 @@ def main(page: ft.Page):
                 content=header,
                 padding=10,
                 bgcolor="#E6E6E6",
-                height=60
             )
 
+            # Background container
             background_container = ft.Container(
                 expand=True,
                 image=ft.Image(
                     src="University_Background.png",
-                    fit=ft.ImageFit.COVER
+                    fit=ft.ImageFit.COVER,
                 )
             )
 
-            form_container.content = ft.Column(
-                [
-                    header_container,
-                    background_container
-                ],
-                spacing=0,
+            # Full page container (created here)
+            home_container = ft.Container(
                 expand=True,
-                alignment=ft.MainAxisAlignment.START,
-                horizontal_alignment=ft.CrossAxisAlignment.STRETCH
+                content=ft.Column(
+                    [
+                        header_container,
+                        background_container,
+                    ],
+                    spacing=0,
+                    expand=True,
+                )
             )
 
+            # Add the view
             page.views.append(
                 ft.View(
                     "/",
-                    [form_container],
-                    bgcolor="#CBD4E0"
+                    [home_container],
+                    bgcolor="#CBD4E0",
                 )
             )
 
