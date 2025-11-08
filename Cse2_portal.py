@@ -53,6 +53,7 @@ def main(page: ft.Page):
         page.views.clear()
         # ---------------- HOME PAGE ----------------
         if page.route == "/":
+            # header row
             header = ft.Row(
                 [
                     ft.ElevatedButton(
@@ -93,7 +94,7 @@ def main(page: ft.Page):
                 )
             )
 
-            form_container = ft.Container(expand=True)  # full-page container
+            # use the global container
             form_container.content = ft.Column(
                 [
                     header_container,
@@ -110,6 +111,7 @@ def main(page: ft.Page):
                     bgcolor="#CBD4E0",
                 )
             )
+
         # ---------------- LOGIN PAGE ----------------
         if page.route == "/login":
 
